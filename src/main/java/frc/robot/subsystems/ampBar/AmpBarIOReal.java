@@ -29,6 +29,7 @@ public class AmpBarIOReal implements AmpBarIO {
     private double spinnerSpeedpoint;
     private double spinnerAppliedVoltage;
 
+    final double ERROR_OF_MARGIN = 0.1;
     public AmpBarIOReal()
     {
         leftMotor = new CANSparkMax(31, MotorType.kBrushless);
@@ -53,6 +54,7 @@ public class AmpBarIOReal implements AmpBarIO {
 
         pivotEncoder.setPositionConversionFactor(Math.PI * 2);
         pivotEncoder.setVelocityConversionFactor(Math.PI * 2);
+
     }
 
     @Override
@@ -109,7 +111,7 @@ public class AmpBarIOReal implements AmpBarIO {
 
     @Override
     public boolean atSetPoint() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'atSetPoint'");
+        double motorPosition = getPivotPosition();
+        return Math.abs(motorPosition - pivotPositionSetpoint) <= ERROR_OF_MARGIN;
     }
 }
